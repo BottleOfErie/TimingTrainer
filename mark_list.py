@@ -13,8 +13,8 @@ class MarkItem:
     def __str__(self) -> str:
         return f"{self.time}:{self.name}"
 
-if os.path.exists("./cache.py"):
-    with open("./cache.py","rb") as f:
+if os.path.exists("./cache"):
+    with open("./cache","rb") as f:
         cache=pickle.load(f)
 
 class MarkList(tk.Listbox):
@@ -54,7 +54,7 @@ class MarkList(tk.Listbox):
         if not self.hasfile:
             return
         cache[self.file]=self.marks
-        with open("./cache.py","wb") as f:
+        with open("./cache","wb") as f:
             pickle.dump(cache,f,pickle.HIGHEST_PROTOCOL)
         self.marks=[]
         self.delete(0,tk.END)
