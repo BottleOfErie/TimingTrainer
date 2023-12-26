@@ -3,6 +3,7 @@ from player import Player
 from tkinter.filedialog import askopenfilename
 import pathlib
 import time
+import mark_list
 
 class App(tk.Tk):
     def __init__(self):
@@ -17,6 +18,7 @@ class App(tk.Tk):
         self.last_pause_time=0
         self.create_video_view()
         self.create_control_view()
+        self.create_mark_list()
         self.bind("<space>",lambda x: self.spacebar_pressed())
     
     def info(self,infomation):
@@ -62,7 +64,11 @@ class App(tk.Tk):
         tk.Button(frame, text="标记", command=lambda: self.click(3)).pack(side=tk.LEFT)
         self.info_label=tk.Label(frame)
         self.info_label.pack(side=tk.LEFT, padx=5)
-        frame.pack()
+        frame.pack(side=tk.BOTTOM)
+    
+    def create_mark_list(self):
+        self.mark_list=mark_list.MarkList(self)
+        self.mark_list.pack(side=tk.RIGHT)
 
     def click(self, action):
         if action == 0:
@@ -77,8 +83,8 @@ class App(tk.Tk):
                     self.last_accurate_time=0
                     self.delta_accumulation=0
                     self.last_pause_time=0
-                    self.player.pause()
                     self.position.set(0)
+                    self.mark_list.set_file(pathlib.Path(file).name)
                     self.player.play(pathlib.Path(file).as_uri())
         elif action == 1:
             if self.player.get_state() == 1:
@@ -89,8 +95,10 @@ class App(tk.Tk):
                 self.player.next_frame()
                 self.last_pause_time+=self.player.get_frame_time()*1000
         elif action == 3:
-            self.mark_frame=self.fetch_time()
-            self.info(f"marked:{self.mark_frame} ms")
+            if self.player.get_state() in [0,1]:
+                self.mark_frame=self.fetch_time()
+                self.mark_list.add_item(mark_list.MarkItem(self.mark_frame,self.player.get_position(),str(self.mark_list.size())))
+                self.info(f"marked:{self.mark_frame} ms")
             
 
 
