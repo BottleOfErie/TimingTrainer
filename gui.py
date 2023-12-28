@@ -4,6 +4,7 @@ from tkinter.filedialog import askopenfilename
 import pathlib
 import time
 import mark_list
+import scoreboard
 
 class App(tk.Tk):
     def __init__(self):
@@ -46,6 +47,7 @@ class App(tk.Tk):
             if(self.mark_frame>-1):
                 time=self.last_pause_time-self.mark_frame
                 self.info(f"delta:{time} ms ({time/1000*60} frames)")
+                self.scoreboard.add_score(time/1000*60)
             self.player.pause()
 
     def create_video_view(self):
@@ -67,8 +69,12 @@ class App(tk.Tk):
         frame.pack(side=tk.BOTTOM)
     
     def create_mark_list(self):
-        self.mark_list=mark_list.MarkList(self)
+        frame=tk.Frame(self)
+        self.scoreboard=scoreboard.Scoreboard(frame)
+        self.scoreboard.pack(side=tk.LEFT)
+        self.mark_list=mark_list.MarkList(frame,self)
         self.mark_list.pack(side=tk.RIGHT)
+        frame.pack(side=tk.BOTTOM)
 
     def click(self, action):
         if action == 0:
@@ -85,6 +91,7 @@ class App(tk.Tk):
                     self.last_pause_time=0
                     self.position.set(0)
                     self.mark_list.set_file(pathlib.Path(file).name)
+                    self.scoreboard.clear()
                     self.player.play(pathlib.Path(file).as_uri())
         elif action == 1:
             if self.player.get_state() == 1:

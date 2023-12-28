@@ -18,8 +18,8 @@ if os.path.exists("./cache"):
         cache=pickle.load(f)
 
 class MarkList(tk.Listbox):
-    def __init__(self,parent):
-        super(MarkList,self).__init__(parent,width=100)
+    def __init__(self,dad,parent):
+        super(MarkList,self).__init__(dad,width=100)
         self.hasfile=False
         self.bind('<Double-Button-1>',lambda evt:MarkList.upload_mark(parent,self.marks[self.curselection()[0]]))
         # self.bind('<Double-Button-1>',lambda evt:print(self.curselection()))
