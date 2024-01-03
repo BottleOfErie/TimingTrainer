@@ -5,6 +5,7 @@ import pathlib
 import time
 import mark_list
 import scoreboard
+import random
 
 class App(tk.Tk):
     def __init__(self):
@@ -49,6 +50,10 @@ class App(tk.Tk):
                 self.info(f"delta:{time} ms ({time/1000*60} frames)")
                 self.scoreboard.add_score(time/1000*60)
             self.player.pause()
+        elif(self.player.get_state()==0):
+            r=random.Random()
+            self.player.set_time(max(0,self.player.get_time()-r.randrange(2,5)*1000))
+            self.player.resume()
 
     def create_video_view(self):
         self._canvas = tk.Canvas(self, bg="black",width=960,height=540)
@@ -62,7 +67,7 @@ class App(tk.Tk):
         tk.Scale(frame, from_=0, to=1000, orient=tk.HORIZONTAL,variable=self.position,command=lambda x:self.player.set_position(self.position.get()/1000), length=900).pack(side=tk.TOP)
         tk.Button(frame, text="播放/打开", command=lambda: self.click(0)).pack(side=tk.LEFT, padx=5)
         tk.Button(frame, text="暂停", command=lambda: self.click(1)).pack(side=tk.LEFT)
-        tk.Button(frame, text="步进", command=lambda: self.click(2)).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame, text="步进", command=lambda: self.click(2)).pack(side=tk.LEFT, padx=10)
         tk.Button(frame, text="标记", command=lambda: self.click(3)).pack(side=tk.LEFT)
         tk.Button(frame, text="保存", command=lambda: self.click(4)).pack(side=tk.LEFT)
         self.info_label=tk.Label(frame)
