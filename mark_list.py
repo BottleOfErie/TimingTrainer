@@ -53,8 +53,13 @@ class MarkList(tk.Listbox):
     def clear(self):
         if not self.hasfile:
             return
+        self.save()
+        self.marks=[]
+        self.delete(0,tk.END)
+    
+    def save(self):
+        if not self.hasfile:
+            return
         cache[self.file]=self.marks
         with open("./cache","wb") as f:
             pickle.dump(cache,f,pickle.HIGHEST_PROTOCOL)
-        self.marks=[]
-        self.delete(0,tk.END)

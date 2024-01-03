@@ -64,6 +64,7 @@ class App(tk.Tk):
         tk.Button(frame, text="暂停", command=lambda: self.click(1)).pack(side=tk.LEFT)
         tk.Button(frame, text="步进", command=lambda: self.click(2)).pack(side=tk.LEFT, padx=5)
         tk.Button(frame, text="标记", command=lambda: self.click(3)).pack(side=tk.LEFT)
+        tk.Button(frame, text="保存", command=lambda: self.click(4)).pack(side=tk.LEFT)
         self.info_label=tk.Label(frame)
         self.info_label.pack(side=tk.LEFT, padx=5)
         frame.pack(side=tk.BOTTOM)
@@ -106,6 +107,9 @@ class App(tk.Tk):
                 self.mark_frame=self.fetch_time()
                 self.mark_list.add_item(mark_list.MarkItem(self.mark_frame,self.player.get_position(),str(self.mark_list.size())))
                 self.info(f"marked:{self.mark_frame} ms")
+        elif action == 4:
+            self.mark_list.save()
+            self.info(f"Saved")
             
 
 
