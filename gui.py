@@ -89,6 +89,7 @@ class App(tk.Tk):
             if self.player.get_state() == 0:
                 self.player.resume()
             else:
+                self.player.pause()
                 file=askopenfilename(title="打开视频文件")
                 if file:
                     self.mark_frame=-1
