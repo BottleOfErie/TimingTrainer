@@ -8,7 +8,7 @@ class Scoreboard(tk.Label):
         delta=-delta
         if delta<0:
             return 7
-        times=[13,15,17,19,22,25,30]
+        times=[5,12,13,19,25,30,45]
         for i in range(len(times)):
             if delta<times[i]:
                 return i
@@ -19,7 +19,7 @@ class Scoreboard(tk.Label):
         self.scores=[0,0,0,0,0,0,0,0]
     
     def add_score(self,delta):
-        names=['无回','回1','回2','回3','回4','回5','回避衣','MISS']
+        names=['小居','大居','无回','回3','回5','回避衣','看破','MISS']
         self.deltas.append(delta)
         s=Scoreboard.get_score(delta)
         self.scores[s]=self.scores[s]+1

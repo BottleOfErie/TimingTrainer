@@ -31,6 +31,7 @@ class App(tk.Tk):
         self.last_time=self.player.get_time()
         self.last_accurate_time=int(time.time()*1000)
         self.delta_accumulation=0
+        print(f'time update:{self.last_time}')
 
     def fetch_time(self):
         if not self.player.get_state()==1:
@@ -47,12 +48,11 @@ class App(tk.Tk):
             self.last_pause_time=self.fetch_time()
             if(self.mark_frame>-1):
                 time=self.last_pause_time-self.mark_frame
-                self.info(f"delta:{time} ms ({time/1000*60} frames)")
-                self.scoreboard.add_score(time/1000*60)
+                frame=time/1000*self.player.get_fps()
+                self.info(f"delta:{time} ms ({frame} frames)")
+                self.scoreboard.add_score(frame)
             self.player.pause()
         elif(self.player.get_state()==0):
-            r=random.Random()
-            self.player.set_time(max(0,self.player.get_time()-r.randrange(2,5)*1000))
             self.player.resume()
 
     def create_video_view(self):
@@ -67,6 +67,7 @@ class App(tk.Tk):
         tk.Scale(frame, from_=0, to=1000, orient=tk.HORIZONTAL,variable=self.position,command=lambda x:self.player.set_position(self.position.get()/1000), length=900).pack(side=tk.TOP)
         tk.Button(frame, text="播放/打开", command=lambda: self.click(0)).pack(side=tk.LEFT, padx=5)
         tk.Button(frame, text="暂停", command=lambda: self.click(1)).pack(side=tk.LEFT)
+        tk.Button(frame, text="随机", command=lambda: self.click(5)).pack(side=tk.LEFT)
         tk.Button(frame, text="步进", command=lambda: self.click(2)).pack(side=tk.LEFT, padx=10)
         tk.Button(frame, text="标记", command=lambda: self.click(3)).pack(side=tk.LEFT)
         tk.Button(frame, text="保存", command=lambda: self.click(4)).pack(side=tk.LEFT)
@@ -106,16 +107,21 @@ class App(tk.Tk):
         elif action == 2:
             if(self.player.get_state()==0):
                 self.player.next_frame()
-                self.last_pause_time+=self.player.get_frame_time()*1000
+                self.update_time()
+                self.last_pause_time=self.last_time
+                print(f"steped:{self.fetch_time()}")
         elif action == 3:
             if self.player.get_state() in [0,1]:
                 self.mark_frame=self.fetch_time()
-                self.mark_list.add_item(mark_list.MarkItem(self.mark_frame,self.player.get_position(),str(self.mark_list.size())))
+                self.mark_list.add_item(mark_list.MarkItem(self.mark_frame,str(self.mark_list.size())))
                 self.info(f"marked:{self.mark_frame} ms")
         elif action == 4:
             self.mark_list.save()
             self.info(f"Saved")
-            
+        elif action == 5:
+            r=random.Random()
+            self.player.set_time(max(0,self.player.get_time()-r.randrange(2,5)*1000))
+            self.player.resume()
 
 
 if "__main__" == __name__:

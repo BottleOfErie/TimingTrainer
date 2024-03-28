@@ -5,10 +5,9 @@ import os
 cache={}
 
 class MarkItem:
-    def __init__(self,time,position,name):
+    def __init__(self,time,name):
         self.time=time
         self.name=name
-        self.position=position
     
     def __str__(self) -> str:
         return f"{self.time}:{self.name}"
@@ -25,11 +24,11 @@ class MarkList(tk.Listbox):
         # self.bind('<Double-Button-1>',lambda evt:print(self.curselection()))
         self.bind('<Double-Button-2>',lambda evt:self.delete_mark(self.curselection()))
     
-    def upload_mark(parent,mark):
+    def upload_mark(parent,mark:MarkItem):
         parent.mark_frame=mark.time
         parent.info(f"marked:{mark.time} ms")
-        parent.player.set_position(mark.position)
-        parent.position.set(mark.position*1000)
+        parent.player.pause()
+        parent.player.set_time(mark.time)
 
     def delete_mark(self,item):
         print(item)

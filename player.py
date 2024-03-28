@@ -19,7 +19,7 @@ class Player:
         return self.media.get_time()
     # 拖动指定的毫秒值处播放。成功返回0，失败返回-1 (需要注意，只有当前多媒体格式或流媒体协议支持才会生效)
     def set_time(self, ms):
-        return self.media.set_time(ms)
+        return self.media.set_time(int(ms))
     def next_frame(self):
         return self.media.next_frame()
     def get_position(self):
@@ -27,7 +27,13 @@ class Player:
     def set_position(self, float_val):
         return self.media.set_position(float_val)
     def get_frame_time(self):
-        return 1/self.media.get_fps()
+        if self.media.get_fps()!=0:
+            return 1/self.media.get_fps()
+        return 1/60
+    def get_fps(self):
+        if self.media.get_fps()!=0:
+            return self.media.get_fps()
+        return 60
     def set_window(self, wm_id):
         if platform.system() == 'Windows':
             self.media.set_hwnd(wm_id)
