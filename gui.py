@@ -71,6 +71,7 @@ class App(tk.Tk):
         tk.Button(frame, text="步进", command=lambda: self.click(2)).pack(side=tk.LEFT, padx=10)
         tk.Button(frame, text="标记", command=lambda: self.click(3)).pack(side=tk.LEFT)
         tk.Button(frame, text="保存", command=lambda: self.click(4)).pack(side=tk.LEFT)
+        tk.Scale(frame, from_=100, to=0, orient=tk.VERTICAL,command=lambda x:self.player.set_volume(x), length=100).pack(side=tk.LEFT)
         self.info_label=tk.Label(frame)
         self.info_label.pack(side=tk.LEFT, padx=5)
         frame.pack(side=tk.BOTTOM)

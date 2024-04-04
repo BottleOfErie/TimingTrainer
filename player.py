@@ -20,6 +20,10 @@ class Player:
     # 拖动指定的毫秒值处播放。成功返回0，失败返回-1 (需要注意，只有当前多媒体格式或流媒体协议支持才会生效)
     def set_time(self, ms):
         return self.media.set_time(int(ms))
+    def get_volume(self):
+        return self.media.audio_get_volume()
+    def set_volume(self, vol):
+        return self.media.audio_set_volume(int(vol))
     def next_frame(self):
         return self.media.next_frame()
     def get_position(self):
